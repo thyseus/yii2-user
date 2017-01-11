@@ -11,6 +11,7 @@
 
 namespace dektrium\user\models;
 
+use Yii;
 use dektrium\user\Finder;
 use dektrium\user\helpers\Password;
 use dektrium\user\Mailer;
@@ -22,7 +23,6 @@ use yii\db\ActiveRecord;
 use yii\web\Application as WebApplication;
 use yii\web\IdentityInterface;
 use yii\helpers\ArrayHelper;
-
 
 /**
  * User ActiveRecord model.
@@ -74,6 +74,9 @@ class User extends ActiveRecord implements IdentityInterface
 
     /** @var string Plain password. Used for model validation. */
     public $password;
+
+    /** @var string in case the yii2-rbac module is used, we can filter users by auth_item in the admin/index view */
+    public $auth_item;
 
     /** @var Profile|null */
     private $_profile;
@@ -187,14 +190,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'username'          => \Yii::t('user', 'Username'),
-            'email'             => \Yii::t('user', 'Email'),
-            'registration_ip'   => \Yii::t('user', 'Registration ip'),
-            'unconfirmed_email' => \Yii::t('user', 'New email'),
-            'password'          => \Yii::t('user', 'Password'),
-            'created_at'        => \Yii::t('user', 'Registration time'),
-            'last_login_at'     => \Yii::t('user', 'Last login'),
-            'confirmed_at'      => \Yii::t('user', 'Confirmation time'),
+            'username'          => Yii::t('user', 'Username'),
+            'email'             => Yii::t('user', 'Email'),
+            'registration_ip'   => Yii::t('user', 'Registration ip'),
+            'unconfirmed_email' => Yii::t('user', 'New email'),
+            'password'          => Yii::t('user', 'Password'),
+            'created_at'        => Yii::t('user', 'Registration time'),
+            'last_login_at'     => Yii::t('user', 'Last login'),
+            'confirmed_at'      => Yii::t('user', 'Confirmation time'),
+            'auth_item'         => Yii::t('user', 'Permissions'),
         ];
     }
 
@@ -444,6 +448,11 @@ class User extends ActiveRecord implements IdentityInterface
                 $this->save(false);
             }
         }
+    }
+
+    public function getAuthItems()
+    {
+        return Yii::$app->authManager->getItemsByUser($this->id);
     }
 
     /**
