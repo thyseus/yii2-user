@@ -61,20 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'auth_item',
             'format' => 'html',
-            'value' => function ($data) {
-                if(!$data->authItems)
-                    return null;
-
-                $auth_items = '';
-
-                foreach ($data->authItems as $auth_item) {
-                    $auth_items .= $auth_item->name . ', ';
-                }
-
-                $auth_items = substr($auth_items, 0, -2);
-
-                return $auth_items;
-            },
+            'value' => function ($data) { return implode(', ', array_map(function($ai) { return $ai->name; }, $data->authItems)); },
             'filter' => ArrayHelper::map(Yii::$app->db->createCommand('select name from auth_item')->queryAll(), 'name', 'name'),
             'visible' => Yii::$app->hasModule('rbac'),
         ],
