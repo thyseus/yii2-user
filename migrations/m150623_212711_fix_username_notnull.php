@@ -36,7 +36,7 @@ class m150623_212711_fix_username_notnull extends Migration
             if ($this->dbType == 'sqlsrv') {
                 $this->dropIndex('{{%user_unique_username}}', '{{%user}}');
             }
-            $this->alterColumn('{{%user}}', 'username', $this->string(255), ' NULL');
+            $this->alterColumn('{{%user}}', 'username', $this->string(255). ' NULL');
             if ($this->dbType == 'sqlsrv') {
                 $this->createIndex('{{%user_unique_username}}', '{{%user}}', 'username', true);
             }
