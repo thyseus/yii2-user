@@ -57,7 +57,7 @@ class Migration extends \yii\db\Migration
     
     public function dropTable($table)
     {
-        if ($this->dbType = 'sqlsrv') {
+        if ($this->dbType == 'sqlsrv') {
             $this->dropTableConstraints($table);
         }
         return parent::dropTable($table);
@@ -65,7 +65,7 @@ class Migration extends \yii\db\Migration
     
     public function dropColumn($table, $column)
     {
-        if ($this->dbType = 'sqlsrv') {
+        if ($this->dbType == 'sqlsrv') {
             $this->dropColumnConstraints($table, $column);
         }
         return parent::dropColumn($table, $column);
