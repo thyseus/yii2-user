@@ -10,11 +10,11 @@
  */
 
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\Pjax;
-
 
 /**
  * @var \yii\web\View $this
@@ -34,8 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
-    'filterModel'  => $searchModel,
-    'layout'       => "{items}\n{pager}",
+    'filterModel' => $searchModel,
+    'layout' => "{items}\n{pager}",
     'columns' => [
         'username',
         'email:email',
@@ -58,18 +58,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             },
         ],
-
         [
-          'attribute' => 'last_login_at',
-          'value' => function ($model) {
-            if (!$model->last_login_at || $model->last_login_at == 0) {
-                return Yii::t('user', 'Never');
-            } else if (extension_loaded('intl')) {
-                return Yii::t('user', '{0, date, MMMM dd, YYYY HH:mm}', [$model->last_login_at]);
-            } else {
-                return date('Y-m-d G:i:s', $model->last_login_at);
-            }
-          },
+            'attribute' => 'auth_item',
+            'format' => 'html',
+            'value' => function ($data) { return implode(', ', array_map(function($ai) { return $ai->name; }, $data->authItems)); },
+            'filter' => ArrayHelper::map(Yii::$app->db->createCommand('select name from auth_item')->queryAll(), 'name', 'name'),
+            'visible' => Yii::$app->hasModule('rbac'),
+        ],
+        [
+            'attribute' => 'last_login_at',
+            'value' => function ($model) {
+                if (!$model->last_login_at || $model->last_login_at == 0) {
+                    return Yii::t('user', 'Never');
+                } else if (extension_loaded('intl')) {
+                    return Yii::t('user', '{0, date, MMMM dd, YYYY HH:mm}', [$model->last_login_at]);
+                } else {
+                    return date('Y-m-d G:i:s', $model->last_login_at);
+                }
+            },
         ],
         [
             'header' => Yii::t('user', 'Confirmation'),
@@ -121,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'switch' => function ($url, $model) {
-                    if($model->id != Yii::$app->user->id && Yii::$app->getModule('user')->enableImpersonateUser) {
+                    if ($model->id != Yii::$app->user->id && Yii::$app->getModule('user')->enableImpersonateUser) {
                         return Html::a('<span class="glyphicon glyphicon-user"></span>', ['/user/admin/switch', 'id' => $model->id], [
                             'title' => Yii::t('user', 'Become this user'),
                             'data-confirm' => Yii::t('user', 'Are you sure you want to switch to this user for the rest of this Session?'),
