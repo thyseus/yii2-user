@@ -222,8 +222,9 @@ return [
     'You need to confirm your email address' => 'Sie müssen Ihre Email-Adresse bestätigen.',
     'Your account has been blocked' => 'Ihr Zugang wurde gesperrt',
     'Your account has been created' => 'Ihr Zugang wurde erstellt',
+    'Your account has been created and a message with further instructions has been sent to your email' => 'Ihr Konto wurde erstellt. Eine E-Mail mit einem Bestätigungslink wurde an ihre E-Mail Adresse gesendet.',
     'Your account on {0} has a new password' => 'Ihr Konto auf {0} hat ein neues Passwort',
-    'Your password on {0} has been changed' => 'Ihr Passwort auf {0} wurde verändert',
+    'Your password on {0} has been changed' => 'Ihr Passwort auf {0} wurde verändert',   
     '{0, date, MMMM dd, YYYY HH:mm}' => '{0, date, dd MMMM, YYYY HH:mm}',
     'Password is not necessary because the module is in DEBUG mode.' => 'Passwort ist nicht notwendig, da die Applikation im DEBUG-Modus ist',
 ];
