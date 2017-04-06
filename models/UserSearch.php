@@ -21,6 +21,9 @@ use yii\data\ActiveDataProvider;
  */
 class UserSearch extends Model
 {
+    /** @var integer */
+    public $id;
+
     /** @var string */
     public $username;
 
@@ -56,7 +59,7 @@ class UserSearch extends Model
     public function rules()
     {
         return [
-            'fieldsSafe' => [['username', 'email', 'registration_ip', 'created_at', 'last_login_at', 'auth_item'], 'safe'],
+            'fieldsSafe' => [['id', 'username', 'email', 'registration_ip', 'created_at', 'last_login_at', 'auth_item'], 'safe'],
             'createdDefault' => ['created_at', 'default', 'value' => null],
             'lastloginDefault' => ['last_login_at', 'default', 'value' => null],
         ];
@@ -66,6 +69,7 @@ class UserSearch extends Model
     public function attributeLabels()
     {
         return [
+            'id'              => Yii::t('user', '#'),
             'username'        => Yii::t('user', 'Username'),
             'email'           => Yii::t('user', 'Email'),
             'created_at'      => Yii::t('user', 'Registration time'),
@@ -99,6 +103,7 @@ class UserSearch extends Model
 
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['user.id' => $this->id])
             ->andFilterWhere(['registration_ip' => $this->registration_ip]);
 
         if ($this->auth_item) {
