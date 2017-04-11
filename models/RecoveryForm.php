@@ -70,6 +70,7 @@ class RecoveryForm extends Model
         return [
             'email'    => \Yii::t('user', 'Email'),
             'password' => \Yii::t('user', 'Password'),
+            'password_confirmation' => \Yii::t('user', 'Password confirmation'),
         ];
     }
 
