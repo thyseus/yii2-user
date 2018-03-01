@@ -15,6 +15,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\Pjax;
+use dektrium\user\controllers\AdminController;
 
 /**
  * @var \yii\web\View $this
@@ -131,7 +132,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'switch' => function ($url, $model) {
-                    if(\Yii::$app->user->identity->isAdmin && $model->id != Yii::$app->user->id && Yii::$app->getModule('user')->enableImpersonateUser) {
+                    if (Yii::$app->user->identity->isAdmin
+                        && $model->id != Yii::$app->user->id
+                        && Yii::$app->getModule('user')->enableImpersonateUser
+                        && !Yii::$app->session->has(AdminController::ORIGINAL_USER_SESSION_KEY)) {
                         return Html::a('<span class="glyphicon glyphicon-user"></span>', ['/user/admin/switch', 'id' => $model->id], [
                             'title' => Yii::t('user', 'Become this user'),
                             'data-confirm' => Yii::t('user', 'Are you sure you want to switch to this user for the rest of this Session?'),

@@ -326,6 +326,10 @@ class AdminController extends Controller
      * When no id is given, we switch back to the original admin user
      * that started the impersonation.
      *
+     * When we are already impersonated, it is not allowed to
+     * impersonate again. This is a Security feature to deny
+     * infinite impersonating.
+     *
      * @param int $id
      *
      * @return string
@@ -336,12 +340,12 @@ class AdminController extends Controller
             throw new ForbiddenHttpException(Yii::t('user', 'Impersonate user is disabled in the application configuration'));
         }
 
-        if(!$id && Yii::$app->session->has(self::ORIGINAL_USER_SESSION_KEY)) {
+        if (!$id && Yii::$app->session->has(self::ORIGINAL_USER_SESSION_KEY)) { // Logout of impersonation
             $user = $this->findModel(Yii::$app->session->get(self::ORIGINAL_USER_SESSION_KEY));
 
             Yii::$app->session->remove(self::ORIGINAL_USER_SESSION_KEY);
         } else {
-            if (!Yii::$app->user->identity->isAdmin) {
+            if (!Yii::$app->user->identity->isAdmin || Yii::$app->session->has(self::ORIGINAL_USER_SESSION_KEY)) {
                 throw new ForbiddenHttpException;
             }
 
