@@ -118,7 +118,7 @@ class Bootstrap implements BootstrapInterface
         if (!defined('YII_ENV')) {
             return false;
         }
-        if (defined('YII_ENV') && YII_ENV !== 'dev') {
+        if (defined('YII_ENV') && YII_ENV === 'prod') {
             return false;
         }
         if (defined('YII_DEBUG') && YII_DEBUG !== true) {
